@@ -1,0 +1,33 @@
+-- Data from http://www.bayareabikeshare.com/open-data
+
+-- 1. What was the hottest day? Where was that?
+SELECT
+	ZIP,
+	MAX(maxTemperatureF) maxTemp
+FROM
+	weather
+-- The hottest day was 134F on Nov 17, 2015, in the 94063 zip code. 
+
+-- 2. How many trips started at each station?
+SELECT
+	start_station,
+	COUNT(*) num
+FROM
+	trips
+GROUP BY 1
+
+-- 3. What's the shortest trip that happened?
+SELECT
+	MIN(duration)
+FROM
+	trips
+  -- The shortest trip was 100. 
+  
+-- 4. What is the average trip duration, by end station?
+SELECT
+	end_station,
+	AVG(duration)
+FROM
+	trips
+GROUP BY end_station
+
