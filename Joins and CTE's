@@ -1,0 +1,98 @@
+Author: Jackie Zuker
+
+-- 1. What are the three longest trips on rainy days?
+SELECT
+	date(trips.start_date),
+	trips.duration,
+	weather.Events raindays
+FROM
+	trips
+LEFT JOIN
+	weather
+ON
+	 date(trips.start_date) = weather.Date
+WHERE
+	raindays LIKE 'Rain' 	 
+ORDER BY duration DESC	 
+LIMIT 3
+
+
+-- 2. What is the average number of open docks in each station on days where it is raining in that zip code?
+
+
+WITH
+	rainydaysbyzip
+AS (
+	SELECT
+		weather.Date,
+		weather.Events,
+		weather.ZIP
+	FROM
+		weather
+	WHERE
+		weather.Events = 'Rain'
+),
+availability as (
+SELECT
+	AVG(status.docks_available) avg_docks,
+	status.station_id,
+	date(status.timestamp) stat_date
+FROM
+	status	
+GROUP BY station_id, 	stat_date
+),
+dockswithnames as (
+SELECT
+  availability.avg_docks avg_docks,
+  availability.stat_date stat_date,
+  stations.name name
+FROM
+   availability
+LEFT JOIN
+	stations 
+ON
+	stations.station_id = availability.station_id
+	)
+	
+SELECT
+	dockswithnames.avg_docks,
+	dockswithnames.stat_date,
+	dockswithnames.name,
+	trips.zip_code,
+	rainydaysbyzip.Events
+FROM
+	dockswithnames
+LEFT JOIN
+	trips
+ON
+	trips.start_station = dockswithnames.name
+LEFT JOIN
+	rainydaysbyzip
+ON
+	rainydaysbyzip.ZIP = trips.zip_code
+
+  
+
+
+
+
+
+
+
+-- 3. Which station is empty most often?
+
+SELECT 
+	stations.name,
+-- status.timestamp,
+status.bikes_available,
+COUNT(status.timestamp)
+FROM 
+status
+LEFT JOIN
+stations
+ON
+stations.station_id = status.station_id
+WHERE
+status.bikes_available = 0
+GROUP BY status.station_id
+ORDER BY Count(status.station_id) DESC
