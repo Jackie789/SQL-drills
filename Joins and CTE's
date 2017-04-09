@@ -19,6 +19,9 @@ LIMIT 3
 
 -- 2. What is the average number of open docks in each station on days where it is raining in that zip code?
 
+-- This Query does not provide exactly the right answer. Unfortunately, this database within SQlite will no longer 
+-- run on my computer without crashing. I plan on improving this query soon on another computer, and also compressing
+-- this query once the correct answer is obtained. 
 
 WITH
 	rainydaysbyzip
