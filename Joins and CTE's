@@ -23,6 +23,7 @@ LIMIT 3
 -- run on my computer without crashing. I plan on improving this query soon on another computer, and also compressing
 -- this query once the correct answer is obtained. 
 
+
 WITH
 	rainydaysbyzip
 AS (
@@ -51,7 +52,7 @@ SELECT
   stations.name name
 FROM
    availability
-LEFT JOIN
+JOIN
 	stations 
 ON
 	stations.station_id = availability.station_id
@@ -65,20 +66,14 @@ SELECT
 	rainydaysbyzip.Events
 FROM
 	dockswithnames
-LEFT JOIN
+JOIN
 	trips
 ON
 	trips.start_station = dockswithnames.name
-LEFT JOIN
+JOIN
 	rainydaysbyzip
 ON
 	rainydaysbyzip.ZIP = trips.zip_code
-
-  
-
-
-
-
 
 
 
